@@ -68,9 +68,10 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
 
-      // console.log('new Product', thisProduct);
+      console.log('new Product', thisProduct);
     }
 
     renderInMenu() {
@@ -100,6 +101,7 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);// buton dodaj do karty
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);// suma kasy
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAccordion() {
@@ -173,7 +175,7 @@
       /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
 
       const formData = utils.serializeFormToObject(thisProduct.form);// aktualizuje się po kliknięciu
-      console.log('formData:', formData);// zwraca obiekt, klucze: np. sauce, wlasciwości [" tomato",..] i tp
+      //console.log('formData:', formData);// zwraca obiekt, klucze: np. sauce, wlasciwości [" tomato",..] i tp
 
       /* set variable price to equal thisProduct.data.price */
       let price = thisProduct.data.price;
@@ -187,7 +189,7 @@
         /* save the element in thisProduct.data.params with key paramId as const param */
 
         const param = thisProduct.data.params[paramId];
-        console.log('param:', param);// uwzględnia wszystkie params z danego dania
+        //console.log('param:', param);// uwzględnia wszystkie params z danego dania
 
         /* START LOOP: for each optionId in param.options */
 
@@ -196,7 +198,7 @@
           /* save the element in param.options with key optionId as const option */
 
           const option = param.options[optionId];
-          console.log('option:', option);
+          // console.log('option:', option);
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
           // console.log('optionSelected:', optionSelected);
 
@@ -206,7 +208,7 @@
             /* add price of option to variable price */
 
             price += option.price;
-            console.log(price);
+            //console.log(price);
             /* END IF: if option is selected and option is not default */
           }
           /* START ELSE IF: if option is not selected and option is default */
@@ -220,7 +222,7 @@
           /* if optionSelected - add class 'active' to all images of this option*/
 
           const images = thisProduct.imageWrapper.querySelectorAll('.' + paramId + '-' + optionId);
-          console.log('images:', images);
+          //console.log('images:', images);
 
           if (optionSelected) {
             for (let image of images) {
@@ -239,10 +241,89 @@
       }
 
       /* set the contents of thisProduct.priceElem to be the value of variable price */
+      price *= thisProduct.amountWidget.value;
       thisProduct.priceElem.innerHTML = price;
 
     }
+
+    initAmountWidget() {
+      const thisProduct = this;
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+
+      thisProduct.amountWidgetElem.addEventListener('update', function () {
+        thisProduct.processOrder();
+      });
+
+    }
   }
+
+
+  class AmountWidget {
+    constructor(element) {
+      const thisWidget = this;
+
+
+      thisWidget.getElements(element);
+      thisWidget.initAction();
+      thisWidget.value = settings.amountWidget.defaultValue;
+      thisWidget.setValue(thisWidget.input.value);
+
+
+      console.log('AmountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
+    }
+
+
+    getElements(element) {
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value) {
+      const thisWidget = this;
+      const newValue = parseInt(value);
+
+      if (newValue != thisWidget.value && newValue >= settings.amountWidget.defaultMin &&
+        newValue <= settings.amountWidget.defaultMax) {
+        thisWidget.value = newValue;
+        thisWidget.announce();
+      }
+
+      thisWidget.input.value = thisWidget.value;
+    }
+
+    initAction() {
+
+      const thisWidget = this;
+
+      thisWidget.input.addEventListener('change', function () {
+        thisWidget.setValue(thisWidget.input.value);
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value - 1);
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function (event) {
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value + 1);
+      });
+
+    }
+
+    announce() {
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
+  }
+
   const app = {
     //metoda pobierania danych z dataSource
 
