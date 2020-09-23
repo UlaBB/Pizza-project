@@ -99,6 +99,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs); // do zaznaczania okienka
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);// buton dodaj do karty
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);// suma kasy
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion() {
@@ -111,7 +112,7 @@
       /* START: click event listener to trigger */
 
       clickableTrigger.addEventListener('click', function (event) {
-        console.log('clicked');
+        // console.log('clicked');
 
         /* prevent default action for event */
         event.preventDefault();
@@ -171,17 +172,17 @@
 
       /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
 
-      const formData = utils.serializeFormToObject(thisProduct.form);
+      const formData = utils.serializeFormToObject(thisProduct.form);// aktualizuje się po kliknięciu
       console.log('formData:', formData);// zwraca obiekt, klucze: np. sauce, wlasciwości [" tomato",..] i tp
 
       /* set variable price to equal thisProduct.data.price */
       let price = thisProduct.data.price;
-      console.log('price:', price);
+      // console.log('price:', price);
 
       /* START LOOP: for each paramId in thisProduct.data.params */
 
       for (let paramId in thisProduct.data.params) {
-        console.log('paramId:', paramId);
+        // console.log('paramId:', paramId);
 
         /* save the element in thisProduct.data.params with key paramId as const param */
 
@@ -197,7 +198,7 @@
           const option = param.options[optionId];
           console.log('option:', option);
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
-          console.log(optionSelected);
+          // console.log('optionSelected:', optionSelected);
 
           /* START IF: if option is selected and option is not default */
           if (optionSelected && !option.default) {
@@ -213,8 +214,24 @@
 
             /* deduct price of option from price */
             price -= option.price;
-            console.log(price);
+            // console.log(price);
             /* END ELSE IF: if option is not selected and option is default */
+          }
+          /* if optionSelected - add class 'active' to all images of this option*/
+
+          const images = thisProduct.imageWrapper.querySelectorAll('.' + paramId + '-' + optionId);
+          console.log('images:', images);
+
+          if (optionSelected) {
+            for (let image of images) {
+              image.classList.add('active');
+            }
+          }
+          /*else if = remove class */
+          else if (!optionSelected) {
+            for (let image of images) {
+              image.classList.remove('active');
+            }
           }
           /* END LOOP: for each optionId in param.options */
         }
