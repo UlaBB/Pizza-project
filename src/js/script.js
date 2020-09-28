@@ -76,8 +76,12 @@
       defaultValue: 1,
       defaultMin: 1,
       defaultMax: 9,
-    }, // CODE CHANGED
-    // CODE ADDED START
+    },
+    db: {
+      url: '//localhost:3131',
+      product: 'product',
+      order: 'order',
+    },
     cart: {
       defaultDeliveryFee: 20,
     },
@@ -404,6 +408,9 @@
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
       thisCart.dom.productList = document.querySelector(select.cart.productList);
+      thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
+      thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
+      thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
 
       thisCart.renderTotalsKeys = ['totalNumber', 'totalPrice', 'subtotalPrice', 'deliveryFee'];
 
@@ -424,6 +431,11 @@
 
       thisCart.dom.productList.addEventListener('remove', function () {
         thisCart.remove(event.detail.cartProduct);
+      });
+
+      thisCart.dom.form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        thisCart.sendOrder();
       });
     }
 
@@ -482,7 +494,59 @@
       // call update to count prices once again
       thisCart.update();
     }
+
+    sendOrder() {
+      const thisCart = this;
+      const url = settings.db.url + '/' + settings.db.order;
+
+      const payload = {
+        totalPrice: thisCart.totalPrice,
+        phone: thisCart.dom.phone.value,
+        address: thisCart.dom.address.value,
+        totalNumber: thisCart.totalNumber,
+        subtotalPrice: thisCart.subtotalPrice,
+        deliveryFee: thisCart.deliveryFee,
+        products: [],
+      };
+
+
+      for (let product of thisCart.products) {
+        thisCart.getData(product);
+        payload.products.push(thisCart.getData(product));
+      }
+
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      };
+
+      fetch(url, options)
+        .then(function (response) {
+          return response.json();
+        }).then(function (parsedResponse) {
+          console.log('parsedResponse', parsedResponse);
+        });
+    }
+
+    getData(product) {
+
+      const productObject = {};
+
+      productObject.id = product.id;
+      productObject.amount = product.amount;
+      productObject.price = product.price;
+      productObject.priceSingle = product.priceSingle;
+      productObject.params = product.params;
+
+      return productObject;
+      //console.log(productObject);
+    }
   }
+
 
 
   class CartProduct {
@@ -569,9 +633,23 @@
 
     initData: function () {
       const thisApp = this;
+      thisApp.data = {};
 
-      thisApp.data = dataSource;
+      const url = settings.db.url + '/' + settings.db.product;
 
+      fetch(url)
+        .then(function (rawResponse) {
+          return rawResponse.json();
+        })
+        .then(function (parsedResponse) {
+          console.log('parseRespond', parsedResponse);
+
+          /* save parsedResponse as thisApp.data.products */
+          thisApp.data.products = parsedResponse;
+
+          // /* execute initMenu() method */
+          thisApp.initMenu();
+        });
     },
 
     initMenu: function () {
@@ -580,7 +658,7 @@
       // console.log('thisApp.data:', thisApp.data);
 
       for (let productData in thisApp.data.products) {
-        new Product(productData, thisApp.data.products[productData]);
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       }
     },
 
@@ -591,17 +669,18 @@
       thisApp.cart = new Cart(cartElement);
     },
 
+
+
     init: function () {
       const thisApp = this;
-      // console.log('*** App starting ***');
-      // console.log('thisApp:', thisApp);
-      // console.log('classNames:', classNames);
-      // console.log('settings:', settings);
-      // console.log('templates:', templates);
+      console.log('*** App starting ***');
+      console.log('thisApp:', thisApp);
+      console.log('classNames:', classNames);
+      console.log('settings:', settings);
+      console.log('templates:', templates);
 
 
       thisApp.initData();
-      thisApp.initMenu();
       thisApp.initCart();
     },
   };
