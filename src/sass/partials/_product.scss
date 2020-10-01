@@ -12,16 +12,11 @@
   &__header {
     @include flex(row, center, space-between);
     margin-bottom: ($base-size * 2);
-    font-family: $font-header;
-    font-size: 22px;
     cursor: pointer;
   }
 
   &__name {
     position: relative;
-    margin: 0;
-    font-weight: $font-semibold;
-    text-transform: uppercase;
   }
 
   &__icon {
@@ -54,9 +49,6 @@
   }
 
   &__params-title {
-    font-size: 14px;
-    font-weight: $font-bold;
-    text-transform: uppercase;
     margin: ($base-size * 2) 0;
   }
 
@@ -64,7 +56,6 @@
     width: calc(100% - 400px);
     opacity: 0;
     transition: opacity 200ms;
-    border: 1px solid red;
   }
 
   &__total-price {
@@ -125,4 +116,16 @@
     padding: 0;
   }
 
+}
+
+@media (max-width: 767px) {
+  .product__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product__order {
+    order: 1;
+    flex-direction: column;
+  }
 }
