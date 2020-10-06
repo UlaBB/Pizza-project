@@ -89,8 +89,6 @@ const app = {
     }
   },
 
-
-
   initCart: function () {
     const thisApp = this;
 
