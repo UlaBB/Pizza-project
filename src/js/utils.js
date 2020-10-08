@@ -1,6 +1,6 @@
 /* global Handlebars, dataSource */
 
-export const utils = {};
+export const utils = {}; // eslint-disable-line no-unused-vars
 
 utils.createDOMFromHTML = function (htmlString) {
   let div = document.createElement('div');
@@ -35,13 +35,11 @@ utils.serializeFormToObject = function (form) {
   }
   return output;
 };
-
 utils.queryParams = function (params) {
   return Object.keys(params)
     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
     .join('&');
 };
-
 
 utils.convertDataSourceToDbJson = function () {
   const productJson = [];
@@ -51,6 +49,7 @@ utils.convertDataSourceToDbJson = function () {
 
   console.log(JSON.stringify({ product: productJson, order: [] }, null, '  '));
 };
+
 utils.numberToHour = function (number) {
   return (Math.floor(number) % 24) + ':' + (number % 1 * 60 + '').padStart(2, '0');
 };
@@ -74,9 +73,6 @@ utils.addDays = function (dateStr, days) {
 Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
   return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
-
 Handlebars.registerHelper('joinValues', function (input, options) {
   return Object.values(input).join(options.fn(this));
 });
-
-
