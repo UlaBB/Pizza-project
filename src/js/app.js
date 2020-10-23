@@ -102,14 +102,14 @@ const app = {
     });
   },
 
-  initBooking: function () {
-    const thisApp = this;
+  // initBooking: function () {
+  //   const thisApp = this;
 
-    const widgetContainer = document.querySelector(select.containerOf.booking);
-    console.log('widgetContainer:', widgetContainer);
+  //   const widgetContainer = document.querySelector(select.containerOf.booking);
+  //   console.log('widgetContainer:', widgetContainer);
 
-    thisApp.booking = new Booking(widgetContainer);
-  },
+  //   thisApp.booking = new Booking(widgetContainer);
+  // },
 
   init: function () {
     const thisApp = this;
@@ -123,6 +123,13 @@ const app = {
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();
+  },
+  initBooking: function () {
+    const thisApp = this;
+
+    const bookingWidgetContainer = document.querySelector(select.containerOf.booking);
+
+    thisApp.booking = new Booking(bookingWidgetContainer);
   },
 };
 

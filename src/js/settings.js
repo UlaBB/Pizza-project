@@ -76,16 +76,23 @@ export const classNames = {
   },
   cart: {
     wrapperActive: 'active',
+    invisible: 'invisible',
   },
   booking: {
     loading: 'loading',
     tableBooked: 'booked',
+    tableSelected: 'selected',
   },
   nav: {
     active: 'active',
+    invisible: 'invisible',
   },
   pages: {
     active: 'active',
+  },
+  carousel: {
+    zIndex: 'withZ',
+    clickedDot: 'clicked',
   },
 };
 
