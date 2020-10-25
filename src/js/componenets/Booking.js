@@ -17,6 +17,39 @@ export class Booking {
     thisBooking.initActions();
   }
 
+  colorHourpicker() {
+    const thisBooking = this;
+
+    const rangeSlider = document.querySelector('.rangeSlider');
+
+    let percentage = 0;
+    const colorPicker = [];
+
+    for (let i = 12; i < 24; i += 0.5) {
+      percentage += 100 / 24;
+      if ((typeof thisBooking.booked[thisBooking.datePicker.value][i] == 'undefined') || thisBooking.booked[thisBooking.datePicker.value][i].length == 1) {
+        let color = `green ${percentage}%`;
+        colorPicker.push(color);
+        console.log('thisBooking.booked[thisBooking.datePicker.value][i]', thisBooking.booked[thisBooking.datePicker.value][i]);
+      } else if (thisBooking.booked[thisBooking.datePicker.value][i].length == 2) {
+        let color = `orange ${percentage}%`;
+        colorPicker.push(color);
+        console.log('thisBooking.booked[thisBooking.datePicker.value][i]', thisBooking.booked[thisBooking.datePicker.value][i]);
+      } else {
+        let color = `red ${percentage}%`;
+        colorPicker.push(color);
+        console.log('thisBooking.booked[thisBooking.datePicker.value][i]', thisBooking.booked[thisBooking.datePicker.value][i]);
+      }
+    }
+    const linearGrad = colorPicker.join();
+    const gradient = `linear-gradient(to right, ${linearGrad})`;
+    rangeSlider.style.backgroundImage = gradient;
+  }
+
+
+
+
+
   render(widgetContainer) {
     const thisBooking = this;
 
@@ -189,7 +222,7 @@ export class Booking {
         table.classList.remove('reserved');
       }
     }
-
+    thisBooking.colorHourpicker();
   }
 
 
@@ -230,6 +263,7 @@ export class Booking {
 
   initActions() {
     const thisBooking = this;
+
     const formSubmit = document.querySelector('form.booking-form');
     formSubmit.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -241,9 +275,9 @@ export class Booking {
     });
 
 
-    thisBooking.dom.datePicker.addEventListener('updated', function () {
-      thisBooking.removeSelected();
-    });
+    // thisBooking.dom.datePicker.addEventListener('updated', function () {
+    //   thisBooking.removeSelected();
+    // });
 
   }
 
