@@ -5,6 +5,7 @@ import { select, settings, classNames } from './settings.js';
 import { Booking } from './componenets/Booking.js';
 
 
+
 const app = {
   //metoda pobierania danych z dataSource
 
