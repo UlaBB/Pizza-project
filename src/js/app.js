@@ -1,7 +1,7 @@
 
 import { Product } from './componenets/Product.js';
 import { Cart } from './componenets/Cart.js';
-import { select, settings, templates, classNames } from './settings.js';
+import { select, settings, classNames } from './settings.js';
 import { Booking } from './componenets/Booking.js';
 
 
@@ -16,6 +16,9 @@ const app = {
 
     thisApp.navLinks = Array.from(document.querySelectorAll(select.nav.links));
     console.log(thisApp.navLinks);
+
+    thisApp.pageLinks = Array.from(document.querySelectorAll('.link'));
+    console.log(thisApp.pageLinks);
 
     let pagesMatchingHash = [];
 
@@ -39,6 +42,17 @@ const app = {
         thisApp.activatePage(pageId);
       });
     }
+    for (let link of thisApp.pageLinks) {
+      link.addEventListener('click', function (event) {
+        const clickedElement = this;
+        event.preventDefault();
+
+        const pageId = clickedElement.getAttribute('href').replace('#', '');
+        thisApp.activatePage(pageId);
+        link.classList.add('active');
+      });
+    }
+
 
     thisApp.activatePage(pagesMatchingHash.length ? pagesMatchingHash[0].id : thisApp.pages[0].id);
   },
@@ -85,7 +99,10 @@ const app = {
     // console.log('thisApp.data:', thisApp.data);
 
     for (let productData in thisApp.data.products) {
-      new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
+      new Product(
+        thisApp.data.products[productData].id,
+        thisApp.data.products[productData]
+      );
     }
   },
 
@@ -102,22 +119,14 @@ const app = {
     });
   },
 
-  // initBooking: function () {
-  //   const thisApp = this;
-
-  //   const widgetContainer = document.querySelector(select.containerOf.booking);
-  //   console.log('widgetContainer:', widgetContainer);
-
-  //   thisApp.booking = new Booking(widgetContainer);
-  // },
 
   init: function () {
     const thisApp = this;
-    console.log('*** App starting ***');
-    console.log('thisApp:', thisApp);
-    console.log('classNames:', classNames);
-    console.log('settings:', settings);
-    console.log('templates:', templates);
+    // console.log('*** App starting ***');
+    // console.log('thisApp:', thisApp);
+    // console.log('classNames:', classNames);
+    // console.log('settings:', settings);
+    // console.log('templates:', templates);
 
     thisApp.initPages();
     thisApp.initData();

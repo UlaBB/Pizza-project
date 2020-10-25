@@ -1,0 +1,178 @@
+
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.link-wrapper {
+  width: 100%;
+  height: 119px;
+  border-radius: 4px;
+  text-align: center;
+  background-size: cover;
+}
+
+.order-link {
+  background-image: url("https://i.postimg.cc/pL2x7Z5D/pizza-1.jpg");
+  margin-right: 6px;
+}
+
+.booking-link {
+  background-image: url("https://i.postimg.cc/qMvj56MN/pizza-2.jpg");
+}
+
+.link-wrapper a {
+  text-decoration: none;
+  color: white;
+}
+
+.link-wrapper h1 {
+  line-height: 100px;
+  margin: 0;
+  transition: $transition;
+}
+
+.link-wrapper p {
+  opacity: 0;
+  margin: 0;
+  transition: $transition;
+}
+
+.link-wrapper:hover h1 {
+  transform: translateY(-15px);
+}
+
+.link-wrapper:hover p {
+  opacity: 1;
+  transform: translateY(-15px);
+}
+
+.opening-wrapper {
+  width: 658px;
+  height: 120px;
+  border-radius: 4px;
+  background-color: #ff6b6b;
+  margin: 0 auto;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  text-transform: uppercase;
+  line-height: 120px;
+}
+
+.opening-wrapper h1 {
+  margin: 6px 0 0 0;
+  padding: 0;
+  transform: translateY(-10px);
+}
+
+.opening-wrapper p {
+  margin: 0;
+  padding: 0;
+  transform: translateY(-95px);
+  font-weight: 300;
+}
+
+/* Carousel */
+
+.opinions-slider .slide {
+  display: flex;
+  flex: 0 0 50%;
+  height: 193px;
+  width: 100%;
+  margin: 50px auto;
+}
+
+.opinions-slider .image img {
+  max-width: 193px;
+  height: 100%;
+  object-fit: cover;
+  margin: 40px 40px 40px 0;
+  border-radius: $radius;
+}
+
+.text {
+  margin-top: 50px;
+}
+
+.signature {
+  font-style: italic;
+}
+
+.flickity-page-dots {
+  bottom: -50px;
+}
+
+/* Gallery */
+
+.gallery {
+  margin: 150px auto;
+}
+
+.gallery .row {
+  justify-content: space-around;
+}
+
+.gallery img {
+  border-radius: 4px;
+  object-fit: cover;
+  height: 205px;
+  width: 205px;
+  margin-bottom: 10px;
+}
+
+.gallery-link {
+  margin-left: 5px;
+}
+
+.gallery .image {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery .image:after {
+  content: "";
+  width: 100%;
+  height: 92%;
+  border-radius: $radius;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  transition: $transition;
+  z-index: 2;
+}
+
+.icon-wrapper {
+  position: absolute;
+  transform: translate(65px, -135px);
+  z-index: 3;
+}
+
+.icon {
+  font-size: 20px;
+  color: white;
+  opacity: 0;
+  margin: 10px;
+  transition: $transition;
+}
+
+.gallery-link {
+  color: $color-main;
+}
+
+.gallery .image:hover .icon {
+  opacity: 1;
+}
+
+.gallery .image:hover:after {
+  opacity: 1;
+}
+
+.icon:hover {
+  color: $color-main;
+}
